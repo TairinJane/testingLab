@@ -1,7 +1,13 @@
-class Graph<T>(private val directed: Boolean = false) {
-    val adjacencyMap: HashMap<T, HashSet<T>> = HashMap()
+class IntGraph(nodeCount: Int, private val directed: Boolean = false) {
+    val adjacencyMap: HashMap<Int, HashSet<Int>> = HashMap()
 
-    fun addEdge(from: T, to: T) {
+    init {
+        for (node in 0 until nodeCount) {
+            adjacencyMap[node] = HashSet()
+        }
+    }
+
+    fun addEdge(from: Int, to: Int) {
         adjacencyMap
             .computeIfAbsent(from) { HashSet() }
             .add(to)
@@ -16,70 +22,43 @@ class Graph<T>(private val directed: Boolean = false) {
             append(adjacencyMap[key]?.joinToString(", ", "[", "]\n"))
         }
     }.toString()
-
 }
 
-fun <T> breadthFirstTraversal(
-    graph: Graph<T>,
-    startNode: T,
+fun bfs(
+    graph: IntGraph,
+    startNode: Int,
     maxDepth: Int = Int.MAX_VALUE
-): List<T> {
-    println(graph.toString())
+): List<Int> {
 
-    class VisitedMap {
-        val traversalList = mutableListOf<T>()
+    val traversalList = mutableListOf<Int>()
 
-        val visitedMap = mutableMapOf<T, Boolean>().apply {
-            for (node in graph.adjacencyMap.keys) this[node] = false
-        }
-
-        fun isNotVisited(node: T): Boolean = !visitedMap[node]!!
-
-        fun markVisited(node: T) {
-            visitedMap[node] = true
-            traversalList.add(node)
-        }
+    val visitedMap = mutableMapOf<Int, Boolean>().apply {
+        for (node in graph.adjacencyMap.keys) this[node] = false
     }
 
-    val visitedMap = VisitedMap()
-
-    val depthMap = mutableMapOf<T, Int>().apply {
+    val depthMap = mutableMapOf<Int, Int>().apply {
         for (node in graph.adjacencyMap.keys) this[node] = Int.MAX_VALUE
     }
 
-    class Queue {
-        val deck: ArrayDeque<T> = ArrayDeque()
-        fun add(node: T, depth: Int) {
-            deck.add(node)
-            depthMap[node] = depth
-        }
-
-        fun addAdjacentNodes(currentNode: T, depth: Int) {
-            for (node in graph.adjacencyMap[currentNode]!!) {
-                add(node, depth)
-            }
-        }
-
-        fun isNotEmpty() = deck.isNotEmpty()
-        fun remove() = deck.removeFirst()
-    }
-
-    val queue = Queue()
-
-    queue.add(startNode, 0)
+    val queue: ArrayDeque<Int> = ArrayDeque()
+    queue.add(startNode)
+    depthMap[startNode] = 0
 
     while (queue.isNotEmpty()) {
-        val currentNode = queue.remove()
+        val currentNode = queue.removeFirst()
         val currentDepth = depthMap[currentNode]!!
 
         if (currentDepth <= maxDepth) {
-            if (visitedMap.isNotVisited(currentNode)) {
-                visitedMap.markVisited(currentNode)
-                queue.addAdjacentNodes(currentNode, currentDepth + 1)
+            if (!visitedMap[currentNode]!!) {
+                visitedMap[currentNode] = true
+                traversalList.add(currentNode)
+                for (node in graph.adjacencyMap[currentNode]!!) {
+                    queue.add(node)
+                    depthMap[node] = currentDepth + 1
+                }
             }
         }
-
     }
 
-    return visitedMap.traversalList
+    return traversalList
 }

@@ -61,7 +61,7 @@ fun main(args: Array<String>) {
     println(breadthFirstTraversal(graph3, 2))
     println(breadthFirstTraversal(graph3, 0))*/
 
-    val directedGraph = Graph<Int>(true).apply {
+    val directedGraph = IntGraph(8).apply {
         addEdge(0, 2)
         addEdge(0, 3)
         addEdge(1, 3)
@@ -74,7 +74,8 @@ fun main(args: Array<String>) {
         addEdge(4, 7)
         addEdge(5, 7)
     }
-    println(breadthFirstTraversal(directedGraph, 0))
-    println(breadthFirstTraversal(directedGraph, 7))
-    println(breadthFirstTraversal(directedGraph, 2))
+    println(directedGraph.toString())
+    println(bfs(directedGraph, 0))
+    /* println(bfs(directedGraph, 7))
+    println(bfs(directedGraph, 2))*/
 }
