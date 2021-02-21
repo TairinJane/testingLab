@@ -12,7 +12,7 @@ class SeriesTest {
 
     @Test
     fun maclaurinSeriesEquals() {
-        for (i in -31415..31415 step 10) {
+        for (i in -31415..31415 step 1000) {
             val x = (i / 10000).toDouble()
             val cosIdeal = cos(x)
             val cosSeries = cosToMaclaurinSeries(x, termsCount)
@@ -27,7 +27,7 @@ class SeriesTest {
 
     @Test
     fun taylorSeriesEquals() {
-        for (i in -31415..31415 step 10) {
+        for (i in -31415..31415 step 1000) {
             val x = (i / 10000).toDouble()
             val cosIdeal = cos(x)
             val cosSeries = cosToTaylorSeries(x, a, termsCount)
