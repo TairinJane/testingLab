@@ -1,4 +1,4 @@
-class IntGraph(nodeCount: Int, private val directed: Boolean = false) {
+class IntGraph(nodeCount: Int, private val directed: Boolean = true) {
     val adjacencyMap: HashMap<Int, HashSet<Int>> = HashMap()
 
     init {
