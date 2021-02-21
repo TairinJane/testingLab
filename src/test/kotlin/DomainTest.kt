@@ -86,6 +86,11 @@ class DomainTest {
     }
 
     @Test
+    fun cantShootMoreThanShells() {
+        Assertions.assertThrows(Exception::class.java) { spaceShip.shootFromWeapon(Shells.NUCLEAR_BOMB, enemyShip, 1) }
+    }
+
+    @Test
     fun canRemoveWeapon() {
         spaceShip.addWeapon(bombWeapon)
         Assertions.assertThrows(Exception::class.java) { spaceShip.addWeapon(bombWeapon) }
