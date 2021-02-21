@@ -1,13 +1,42 @@
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.pow
 
 class SeriesTest {
 
+    private val termsCount = 9
+    private val a = 0.0
+    private val machineError = (2.0).pow(-52)
+
     @Test
-    fun seriesCosEquals() {
-        for (x in -314..314 step 10) {
-            Assertions.assertEquals(true, cos(x / 100.0).equalsDelta(cosToTaylorSeries(x / 100.0, 7)))
+    fun maclaurinSeriesEquals() {
+        for (i in -31415..31415 step 10) {
+            val x = (i / 10000).toDouble()
+            val cosIdeal = cos(x)
+            val cosSeries = cosToMaclaurinSeries(x, termsCount)
+            val nextTerm = cosMaclaurinSeriesTerm(x, termsCount - 1)
+            Assertions.assertEquals(
+                true,
+                cosSeries.equalsDelta(cosIdeal, max(nextTerm, machineError)),
+                "cos($x) = $cosSeries != $cosIdeal with error $nextTerm"
+            )
+        }
+    }
+
+    @Test
+    fun taylorSeriesEquals() {
+        for (i in -31415..31415 step 10) {
+            val x = (i / 10000).toDouble()
+            val cosIdeal = cos(x)
+            val cosSeries = cosToTaylorSeries(x, a, termsCount)
+            val nextTerm = cosTaylorSeriesTerm(x, a, termsCount - 1)
+            Assertions.assertEquals(
+                true,
+                cosSeries.equalsDelta(cosIdeal, max(nextTerm, machineError)),
+                "cos($x) = $cosSeries != $cosIdeal with error $nextTerm"
+            )
         }
     }
 }
