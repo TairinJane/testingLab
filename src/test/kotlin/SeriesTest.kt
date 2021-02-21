@@ -16,11 +16,11 @@ class SeriesTest {
             val x = (i / 10000).toDouble()
             val cosIdeal = cos(x)
             val cosSeries = cosToMaclaurinSeries(x, termsCount)
-            val nextTerm = cosMaclaurinSeriesTerm(x, termsCount - 1)
+            val maxError = cosMaclaurinSeriesTerm(x, termsCount - 1)
             Assertions.assertEquals(
                 true,
-                cosSeries.equalsDelta(cosIdeal, max(nextTerm, machineError)),
-                "cos($x) = $cosSeries != $cosIdeal with error $nextTerm"
+                cosSeries.equalsDelta(cosIdeal, max(maxError, machineError)),
+                "cos($x) = $cosSeries != $cosIdeal with error $maxError"
             )
         }
     }
@@ -31,11 +31,11 @@ class SeriesTest {
             val x = (i / 10000).toDouble()
             val cosIdeal = cos(x)
             val cosSeries = cosToTaylorSeries(x, a, termsCount)
-            val nextTerm = cosTaylorSeriesTerm(x, a, termsCount - 1)
+            val maxError = cosTaylorSeriesTerm(x, a, termsCount - 1)
             Assertions.assertEquals(
                 true,
-                cosSeries.equalsDelta(cosIdeal, max(nextTerm, machineError)),
-                "cos($x) = $cosSeries != $cosIdeal with error $nextTerm"
+                cosSeries.equalsDelta(cosIdeal, max(maxError, machineError)),
+                "cos($x) = $cosSeries != $cosIdeal with error $maxError"
             )
         }
     }
