@@ -23,7 +23,8 @@ class DomainTest {
             addCrewMember(elis)
             addCrewMember(zafod)
         }
-        Assertions.assertEquals(hashSetOf(ford, elis, zafod), spaceShip.crew)
+        val expectedCrew = hashSetOf(ford, elis, zafod)
+        Assertions.assertEquals(expectedCrew, spaceShip.crew, "Spaceship crew ${spaceShip.crew} is not $expectedCrew")
     }
 
     @Test
@@ -44,13 +45,20 @@ class DomainTest {
             addCrewMember(zafod)
         }
         spaceShip.removeCrewMember(zafod)
-        Assertions.assertEquals(hashSetOf(ford, elis), spaceShip.crew)
+        val expectedCrew = hashSetOf(ford, elis)
+        Assertions.assertEquals(expectedCrew, spaceShip.crew, "Spaceship crew ${spaceShip.crew} is not $expectedCrew")
     }
 
     @Test
     fun canAddShellsToWeapon() {
-        rocketWeapon.addShells(10)
-        Assertions.assertEquals(30, rocketWeapon.shellCount)
+        val initialShells = rocketWeapon.shellCount
+        val shellsToAdd = 10
+        rocketWeapon.addShells(shellsToAdd)
+        Assertions.assertEquals(
+            initialShells + shellsToAdd,
+            rocketWeapon.shellCount,
+            "Shells wasn't added: ${rocketWeapon.shellCount} of ${initialShells + shellsToAdd}"
+        )
     }
 
     @Test
@@ -61,17 +69,20 @@ class DomainTest {
 
     @Test
     fun canShootShellsFromWeapon() {
+        val initialShells = rocketWeapon.shellCount
+        val shellsToShoot = 1
+        val enemyHealth = enemyShip.health
         spaceShip.addWeapon(rocketWeapon)
-        spaceShip.shootFromWeapon(Shells.ROCKET, enemyShip, 1)
-        Assertions.assertEquals(19, rocketWeapon.shellCount)
-        Assertions.assertEquals(90, enemyShip.health)
+        spaceShip.shootFromWeapon(Shells.ROCKET, enemyShip, shellsToShoot)
+        Assertions.assertEquals(initialShells - shellsToShoot, rocketWeapon.shellCount)
+        Assertions.assertEquals(enemyHealth - rocketWeapon.shell.damage * shellsToShoot, enemyShip.health)
     }
 
     @Test
     fun canDestroyShip() {
         spaceShip.addWeapon(nukeWeapon)
         spaceShip.shootFromWeapon(Shells.NUCLEAR_BOMB, enemyShip, 1)
-        Assertions.assertEquals(true, enemyShip.isDead)
+        Assertions.assertEquals(true, enemyShip.isDead, "Enemy ship is not dead")
     }
 
     @Test
