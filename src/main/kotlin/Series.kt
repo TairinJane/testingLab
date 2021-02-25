@@ -3,7 +3,6 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.pow
 
-//Delta is no more than n+1 term
 fun cosToMaclaurinSeries(x: Double, termsCount: Int): Double {
     var result = 0.0
     for (i in 0 until termsCount) {

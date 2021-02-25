@@ -27,7 +27,6 @@ class IntGraph(nodeCount: Int, private val directed: Boolean = true) {
 fun bfs(
     graph: IntGraph,
     startNode: Int,
-    maxDepth: Int = Int.MAX_VALUE
 ): List<Int> {
 
     val traversalList = mutableListOf<Int>()
@@ -36,26 +35,17 @@ fun bfs(
         for (node in graph.adjacencyMap.keys) this[node] = false
     }
 
-    val depthMap = mutableMapOf<Int, Int>().apply {
-        for (node in graph.adjacencyMap.keys) this[node] = Int.MAX_VALUE
-    }
-
     val queue: ArrayDeque<Int> = ArrayDeque()
     queue.add(startNode)
-    depthMap[startNode] = 0
 
     while (queue.isNotEmpty()) {
         val currentNode = queue.removeFirst()
-        val currentDepth = depthMap[currentNode]!!
 
-        if (currentDepth <= maxDepth) {
-            if (!visitedMap[currentNode]!!) {
-                visitedMap[currentNode] = true
-                traversalList.add(currentNode)
-                for (node in graph.adjacencyMap[currentNode]!!) {
-                    queue.add(node)
-                    depthMap[node] = currentDepth + 1
-                }
+        if (!visitedMap[currentNode]!!) {
+            visitedMap[currentNode] = true
+            traversalList.add(currentNode)
+            for (node in graph.adjacencyMap[currentNode]!!) {
+                queue.add(node)
             }
         }
     }
