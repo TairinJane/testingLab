@@ -11,7 +11,7 @@ class SeriesTest {
     private val machineError = (2.0).pow(-52)
 
     @Test
-    fun maclaurinSeriesEquals() {
+    fun maclaurinSeriesPeriodEquals() {
         for (i in -31415..31415 step 1000) {
             val x = (i / 10000).toDouble()
             val cosIdeal = cos(x)
@@ -26,12 +26,27 @@ class SeriesTest {
     }
 
     @Test
-    fun taylorSeriesEquals() {
+    fun taylorSeriesPeriodEquals() {
         for (i in -31415..31415 step 1000) {
             val x = (i / 10000).toDouble()
             val cosIdeal = cos(x)
             val cosSeries = cosToTaylorSeries(x, a, termsCount)
             val maxError = cosTaylorSeriesTerm(x, a, termsCount - 1)
+            Assertions.assertEquals(
+                true,
+                cosSeries.equalsDelta(cosIdeal, max(maxError, machineError)),
+                "cos($x) = $cosSeries != $cosIdeal with error $maxError"
+            )
+        }
+    }
+
+    @Test
+    fun taylorSeriesEachInPeriodEquals() {
+        for (i in -31415..31415 step 1000) {
+            val x = (i / 10000).toDouble()
+            val cosIdeal = cos(x)
+            val cosSeries = cosToTaylorSeries(x, x, termsCount)
+            val maxError = cosTaylorSeriesTerm(x, x, termsCount - 1)
             Assertions.assertEquals(
                 true,
                 cosSeries.equalsDelta(cosIdeal, max(maxError, machineError)),
