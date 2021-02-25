@@ -1,57 +1,68 @@
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
+import kotlin.math.PI
 import kotlin.math.cos
-import kotlin.math.max
-import kotlin.math.pow
 
 class SeriesTest {
 
     private val termsCount = 9
-    private val a = 0.0
-    private val machineError = (2.0).pow(-52)
+    private val maxError = 0.000001
 
-    @Test
-    fun maclaurinSeriesPeriodEquals() {
-        for (i in -31415..31415 step 1000) {
-            val x = (i / 10000).toDouble()
-            val cosIdeal = cos(x)
-            val cosSeries = cosToMaclaurinSeries(x, termsCount)
-            val maxError = cosMaclaurinSeriesTerm(x, termsCount - 1)
-            Assertions.assertEquals(
-                true,
-                cosSeries.equalsDelta(cosIdeal, max(maxError, machineError)),
-                "cos($x) = $cosSeries != $cosIdeal with error $maxError"
-            )
-        }
+    @ParameterizedTest
+    @ValueSource(doubles = [0.0, 2 * PI * 8, -2 * PI * 176])
+    fun `2piN = 1`(x: Double) {
+        val cosSeries = cosToTaylorSeries(x, x, termsCount)
+        Assertions.assertEquals(
+            true,
+            cosSeries.equalsDelta(1.0, maxError),
+            "cos(%.8f) = %.8f != 1 with error %.8f".format(x, cosSeries, maxError)
+        )
     }
 
-    @Test
-    fun taylorSeriesPeriodEquals() {
-        for (i in -31415..31415 step 1000) {
-            val x = (i / 10000).toDouble()
-            val cosIdeal = cos(x)
-            val cosSeries = cosToTaylorSeries(x, a, termsCount)
-            val maxError = cosTaylorSeriesTerm(x, a, termsCount - 1)
-            Assertions.assertEquals(
-                true,
-                cosSeries.equalsDelta(cosIdeal, max(maxError, machineError)),
-                "cos($x) = $cosSeries != $cosIdeal with error $maxError"
-            )
-        }
+    @ParameterizedTest
+    @ValueSource(doubles = [PI / 2, PI / 2 + 10 * PI, PI / 2 - 987 * PI])
+    fun `pi div 2 + piN = 0`(x: Double) {
+        val cosSeries = cosToTaylorSeries(x, x, termsCount)
+        Assertions.assertEquals(
+            true,
+            cosSeries.equalsDelta(0.0, maxError),
+            "cos(%.8f) = %.8f != 0 with error %.8f".format(x, cosSeries, maxError)
+        )
     }
 
-    @Test
-    fun taylorSeriesEachInPeriodEquals() {
-        for (i in -31415..31415 step 1000) {
-            val x = (i / 10000).toDouble()
-            val cosIdeal = cos(x)
-            val cosSeries = cosToTaylorSeries(x, x, termsCount)
-            val maxError = cosTaylorSeriesTerm(x, x, termsCount - 1)
-            Assertions.assertEquals(
-                true,
-                cosSeries.equalsDelta(cosIdeal, max(maxError, machineError)),
-                "cos($x) = $cosSeries != $cosIdeal with error $maxError"
-            )
-        }
+    @ParameterizedTest
+    @ValueSource(doubles = [PI, PI + 2 * PI * 314, PI - 2 * PI * 9])
+    fun `pi + 2piN = -1`(x: Double) {
+        val cosSeries = cosToTaylorSeries(x, x, termsCount)
+        Assertions.assertEquals(
+            true,
+            cosSeries.equalsDelta(-1.0, maxError),
+            "cos(%.8f) = %.8f != -1 with error %.8f".format(x, cosSeries, maxError)
+        )
+    }
+
+    @ParameterizedTest
+    @ValueSource(doubles = [2 * PI + 0.2, 2 * PI * 7 + PI / 2 + 0.6, PI / 2 - 10 * PI - 0.0006461])
+    fun `2piN to pi + 2piN`(x: Double) {
+        val cosSeries = cosToTaylorSeries(x, x, termsCount)
+        val cosIdeal = cos(x)
+        Assertions.assertEquals(
+            true,
+            cosSeries.equalsDelta(cosIdeal, maxError),
+            "cos(%.8f) = %.8f != %.8f with error %.8f".format(x, cosSeries, cosIdeal, maxError)
+        )
+    }
+
+    @ParameterizedTest
+    @ValueSource(doubles = [PI + 2 * PI + 0.4, 2 * PI + 2 * PI * 15 - 0.782, PI / 2 - 37 * PI + 1.124])
+    fun `pi + 2piN to 2pi + 2piN`(x: Double) {
+        val cosSeries = cosToTaylorSeries(x, x, termsCount)
+        val cosIdeal = cos(x)
+        Assertions.assertEquals(
+            true,
+            cosSeries.equalsDelta(cosIdeal, maxError),
+            "cos(%.8f) = %.8f != %.8f with error %.8f".format(x, cosSeries, cosIdeal, maxError)
+        )
     }
 }

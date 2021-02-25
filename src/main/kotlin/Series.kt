@@ -23,7 +23,7 @@ private fun factorial(n: Int): Double {
     return result
 }
 
-fun Double.equalsDelta(other: Double, delta: Double = 0.0001) = abs(this / other - 1) < delta
+fun Double.equalsDelta(other: Double, delta: Double = 0.0001) = abs(this - other) < delta
 
 fun cosToTaylorSeries(x: Double, a: Double, termsCount: Int): Double {
     var result = 0.0
