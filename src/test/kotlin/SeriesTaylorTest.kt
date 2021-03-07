@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import kotlin.math.PI
 import kotlin.math.cos
 
-class SeriesTest {
+class SeriesTaylorTest {
 
     private val termsCount = 9
     private val maxError = 0.000001
