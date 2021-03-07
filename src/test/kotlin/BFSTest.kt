@@ -41,26 +41,24 @@ class BFSTest {
     }
 
     @Test
-    fun traverseDirected() {
-        val graph = IntGraph(8).apply {
+    fun traverseOneNode() {
+        val graph = IntGraph(1).apply {
+            addEdge(0, 0)
+        }
+        Assertions.assertEquals(listOf(0), bfs(graph, 0))
+    }
+
+    @Test
+    fun smallGraph() {
+        val graph = IntGraph(5).apply {
+            addEdge(0, 3)
             addEdge(0, 2)
-            addEdge(1, 3)
-            addEdge(1, 5)
-            addEdge(1, 6)
-            addEdge(2, 0)
+            addEdge(1, 0)
             addEdge(2, 1)
             addEdge(2, 4)
-            addEdge(3, 1)
-            addEdge(3, 5)
-            addEdge(4, 7)
-            addEdge(5, 6)
-            addEdge(5, 7)
-            addEdge(6, 4)
-            addEdge(6, 7)
-            addEdge(7, 5)
+            addEdge(4, 1)
+            addEdge(4, 3)
         }
-        Assertions.assertEquals(listOf(0, 2, 1, 4, 3, 5, 6, 7), bfs(graph, 0))
-        Assertions.assertEquals(listOf(3, 1, 5, 6, 7, 4), bfs(graph, 3))
-        Assertions.assertEquals(listOf(5, 6, 7, 4), bfs(graph, 5))
+        Assertions.assertEquals(listOf(0, 2, 3, 1, 4), bfs(graph, 0))
     }
 }

@@ -29,6 +29,7 @@ fun bfs(
     startNode: Int,
 ): List<Int> {
 
+    println("Start")
     val traversalList = mutableListOf<Int>()
 
     val visitedMap = mutableMapOf<Int, Boolean>().apply {
@@ -37,18 +38,25 @@ fun bfs(
 
     val queue: ArrayDeque<Int> = ArrayDeque()
     queue.add(startNode)
+    println("Add start node $startNode")
 
     while (queue.isNotEmpty()) {
+        println("Queue is not empty: $queue")
         val currentNode = queue.removeFirst()
 
         if (!visitedMap[currentNode]!!) {
+            println("Node $currentNode is not visited")
             visitedMap[currentNode] = true
             traversalList.add(currentNode)
+            print("Add neighbours to queue:")
             for (node in graph.adjacencyMap[currentNode]!!) {
                 queue.add(node)
+                print(" $node")
             }
-        }
+            println()
+        } else println("Node $currentNode is visited")
     }
+    println("Queue is empty -> traversal: $traversalList")
 
     return traversalList
 }
