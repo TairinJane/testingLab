@@ -1,7 +1,5 @@
 package lab1
 
-import cosToMaclaurinSeries
-import equalsDelta
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -17,8 +15,7 @@ class SeriesMaclaurinTest {
     @ValueSource(doubles = [0.0, 2 * PI * 8, -2 * PI * 176])
     fun `2piN = 1`(x: Double) {
         val cosSeries = cosToMaclaurinSeries(x, termsCount)
-        Assertions.assertEquals(
-            true,
+        Assertions.assertTrue(
             cosSeries.equalsDelta(1.0, maxError),
             "cos(%.8f) = %.8f != 1 with error %.8f".format(x, cosSeries, maxError)
         )
@@ -28,8 +25,7 @@ class SeriesMaclaurinTest {
     @ValueSource(doubles = [PI / 2, PI / 2 + 10 * PI, PI / 2 - 987 * PI])
     fun `pi div 2 + piN = 0`(x: Double) {
         val cosSeries = cosToMaclaurinSeries(x, termsCount)
-        Assertions.assertEquals(
-            true,
+        Assertions.assertTrue(
             cosSeries.equalsDelta(0.0, maxError),
             "cos(%.8f) = %.8f != 0 with error %.8f".format(x, cosSeries, maxError)
         )
@@ -39,8 +35,7 @@ class SeriesMaclaurinTest {
     @ValueSource(doubles = [PI, PI + 2 * PI * 314, PI - 2 * PI * 9])
     fun `pi + 2piN = -1`(x: Double) {
         val cosSeries = cosToMaclaurinSeries(x, termsCount)
-        Assertions.assertEquals(
-            true,
+        Assertions.assertTrue(
             cosSeries.equalsDelta(-1.0, maxError),
             "cos(%.8f) = %.8f != -1 with error %.8f".format(x, cosSeries, maxError)
         )
@@ -51,8 +46,7 @@ class SeriesMaclaurinTest {
     fun `2piN to pi + 2piN`(x: Double) {
         val cosSeries = cosToMaclaurinSeries(x, termsCount)
         val cosIdeal = cos(x)
-        Assertions.assertEquals(
-            true,
+        Assertions.assertTrue(
             cosSeries.equalsDelta(cosIdeal, maxError),
             "cos(%.8f) = %.8f != %.8f with error %.8f".format(x, cosSeries, cosIdeal, maxError)
         )
@@ -63,8 +57,7 @@ class SeriesMaclaurinTest {
     fun `pi + 2piN to 2pi + 2piN`(x: Double) {
         val cosSeries = cosToMaclaurinSeries(x, termsCount)
         val cosIdeal = cos(x)
-        Assertions.assertEquals(
-            true,
+        Assertions.assertTrue(
             cosSeries.equalsDelta(cosIdeal, maxError),
             "cos(%.8f) = %.8f != %.8f with error %.8f".format(x, cosSeries, cosIdeal, maxError)
         )

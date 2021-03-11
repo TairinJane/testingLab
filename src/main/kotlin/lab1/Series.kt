@@ -1,3 +1,5 @@
+package lab1
+
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
