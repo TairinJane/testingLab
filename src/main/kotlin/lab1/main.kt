@@ -1,3 +1,5 @@
+import lab1.IntGraph
+
 fun main(args: Array<String>) {
     /*for (x in -314..314) {
         println("cos(%.2f) = %.7f".format(x / 100.0, cos(x / 100.0)))

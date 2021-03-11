@@ -1,4 +1,6 @@
-import domain.*
+package lab1
+
+import lab1.domain.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

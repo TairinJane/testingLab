@@ -1,4 +1,4 @@
-package domain
+package lab1.domain
 
 class Weapon(val name: String, val shell: Shells, var shellCount: Int) {
 

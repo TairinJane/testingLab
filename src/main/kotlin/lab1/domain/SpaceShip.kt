@@ -1,4 +1,4 @@
-package domain
+package lab1.domain
 
 import java.util.*
 import kotlin.collections.HashSet
