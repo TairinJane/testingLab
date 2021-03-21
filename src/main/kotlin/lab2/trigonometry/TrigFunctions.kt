@@ -3,14 +3,14 @@ package lab2.trigonometry
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-fun sin(x: Double): Double {
-    return sqrt(1 - cosTaylorSeriesTerm(x, x, 10).pow(2))
+fun sin(x: Double, cos: (Double) -> Double): Double {
+    return sqrt(1 - cos(x).pow(2))
 }
 
-fun cot(x: Double): Double {
-    return cosTaylorSeriesTerm(x, x, 10)/ sin(x)
+fun cot(x: Double, cos: (Double) -> Double, sin: (Double) -> Double): Double {
+    return cos(x)/ sin(x)
 }
 
-fun sec(x: Double): Double {
-    return 1/ cosTaylorSeriesTerm(x, x, 10)
+fun sec(x: Double, cos: (Double) -> Double): Double {
+    return 1/ cos(x)
 }
