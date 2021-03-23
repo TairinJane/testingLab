@@ -1,17 +1,33 @@
 package lab2.log
 
-fun logN(x: Double, n: Double, ln: (Double) -> Double): Double {
-    return ln(x)/ ln(n)
+import lab2.Function
+import lab2.trigonometry.equalsDelta
+
+open class LogN(private val ln: Ln, private val n: Double) : Function {
+    override fun value(x: Double): Double = if (x.equalsDelta(1.0)) 0.0 else ln.value(x) / ln.value(n)
+
 }
 
-fun log2(x: Double, ln: (Double) -> Double): Double {
-    return logN(x, 2.0, ln)
+open class Log2(private val ln: Ln) : Function {
+
+    private val logN = LogN(ln, 2.0)
+
+    override fun value(x: Double): Double = logN.value(x)
+
 }
 
-fun log5(x: Double, ln: (Double) -> Double): Double {
-    return logN(x, 5.0, ln)
+open class Log5(private val ln: Ln) : Function {
+
+    private val logN = LogN(ln, 5.0)
+
+    override fun value(x: Double): Double = logN.value(x)
+
 }
 
-fun log10(x: Double, ln: (Double) -> Double): Double {
-    return logN(x, 10.0, ln)
+open class Log10(private val ln: Ln) : Function {
+
+    private val logN = LogN(ln, 10.0)
+
+    override fun value(x: Double): Double = logN.value(x)
+
 }
