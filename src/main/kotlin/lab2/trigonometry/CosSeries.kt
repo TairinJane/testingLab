@@ -10,7 +10,7 @@ open class Cos : Function {
     override fun value(x: Double): Double = cos(x)
 }
 
-class CosSeries(private val termsCount: Int = 10) : Cos() {
+class CosSeries(private val precision: Double = 0.0001) : Cos() {
     private fun factorial(n: Int): Double {
         var result = 1.0
         for (i in 1..n) {
@@ -25,9 +25,13 @@ class CosSeries(private val termsCount: Int = 10) : Cos() {
 
     override fun value(x: Double): Double {
         var result = 0.0
-        for (i in 0 until termsCount) {
-            result += cosTaylorSeriesTerm(x, x, i)
-        }
+        var i = 0
+        var term = cosTaylorSeriesTerm(x, x, i)
+        do {
+            result += term
+            i++
+            term = cosTaylorSeriesTerm(x, x, i)
+        } while (term > precision)
         return result
     }
 

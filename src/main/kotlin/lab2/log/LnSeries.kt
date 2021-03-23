@@ -8,16 +8,20 @@ open class Ln : Function {
     override fun value(x: Double): Double = ln(x)
 }
 
-class LnSeries(private val termsCount: Int = 10) : Ln() {
+class LnSeries(private val precision: Double = 0.0001) : Ln() {
     private fun lnTerm(x: Double, n: Int): Double {
         return (-1.0).pow(n) * (x - 1).pow(n + 1) / (n + 1)
     }
 
     override fun value(x: Double): Double {
         var result = 0.0
-        for (i in 0 until termsCount) {
-            result += lnTerm(x, i)
-        }
+        var i = 0
+        var term = lnTerm(x, i)
+        do {
+            result += term
+            i++
+            term = lnTerm(x, i)
+        } while (term > precision)
         return -result
     }
 }

@@ -14,9 +14,9 @@ fun main() {
         println(ln.value(i / 10.0))
     }*/
     val testX = 1.0
-    val cos = CosSeries(10)
+    val cos = CosSeries(0.00001)
     println(cos.value(testX))
-    val ln = LnSeries(10)
+    val ln = LnSeries(0.0001)
     println(ln.value(testX))
     val sin = Sin(cos)
     println(sin.value(testX))

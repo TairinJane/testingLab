@@ -17,6 +17,8 @@ import kotlin.math.tan
 
 class FunctionSystemTest {
 
+    private val precision = 0.0001
+
     @ParameterizedTest(name = "f1-f2 at {0}")
     @DisplayName("Mock f1 and f2")
     @ValueSource(doubles = [0.0, 1.0, 2.0])
@@ -30,7 +32,7 @@ class FunctionSystemTest {
         val functionSystem = FunctionSystem(fn1Mock, fn2Mock)
         val refValue = refFunctionSystem(x)
         val testValue = functionSystem.value(x)
-        Assertions.assertTrue(testValue.equalsDelta(refValue), "test $testValue != $refValue with delta = 0.0001")
+        Assertions.assertTrue(testValue.equalsDelta(refValue, precision), "test $testValue != $refValue with delta = $precision")
     }
 
     @ParameterizedTest(name = "derivative at {0}")
@@ -60,7 +62,7 @@ class FunctionSystemTest {
         val functionSystem = FunctionSystem(fn1, fn2)
         val refValue = refFunctionSystem(x)
         val testValue = functionSystem.value(x)
-        Assertions.assertTrue(testValue.equalsDelta(refValue), "test $testValue != $refValue with delta = 0.0001")
+        Assertions.assertTrue(testValue.equalsDelta(refValue, precision), "test $testValue != $refValue with delta = $precision")
     }
 
     @ParameterizedTest(name = "cos and ln at {0}")
@@ -84,15 +86,15 @@ class FunctionSystemTest {
         val functionSystem = FunctionSystem(fn1, fn2)
         val refValue = refFunctionSystem(x)
         val testValue = functionSystem.value(x)
-        Assertions.assertTrue(testValue.equalsDelta(refValue), "test $testValue != $refValue with delta = 0.0001")
+        Assertions.assertTrue(testValue.equalsDelta(refValue, precision), "test $testValue != $refValue with delta = $precision")
     }
 
     @ParameterizedTest(name = "final at {0}")
     @DisplayName("No mocks")
     @ValueSource(doubles = [0.0, 1.0, 2.0])
     fun final(x: Double) {
-        val cos = CosSeries(10)
-        val ln = LnSeries(10)
+        val cos = CosSeries(0.00001)
+        val ln = LnSeries(0.00001)
         val sin = Sin(cos)
         val cot = Cot(cos, sin)
         val sec = Sec(cos)
@@ -104,6 +106,6 @@ class FunctionSystemTest {
         val functionSystem = FunctionSystem(fn1, fn2)
         val refValue = refFunctionSystem(x)
         val testValue = functionSystem.value(x)
-        Assertions.assertTrue(testValue.equalsDelta(refValue), "test $testValue != $refValue with delta = 0.0001")
+        Assertions.assertTrue(testValue.equalsDelta(refValue, precision), "test $testValue != $refValue with delta = $precision")
     }
 }
