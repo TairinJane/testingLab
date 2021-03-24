@@ -37,7 +37,7 @@ fun getFunctionSystemMock(mockType: MockType): FunctionSystem {
                 on { value(anyDouble()) } doAnswer { i -> 1 / cos(i.arguments[0] as Double) }
             }
             val log2Mock: Log2 = mock {
-                on { value(anyDouble()) } doAnswer { i ->  log(i.arguments[0] as Double, 2.0) }
+                on { value(anyDouble()) } doAnswer { i -> log(i.arguments[0] as Double, 2.0) }
             }
             val log5Mock: Log5 = mock {
                 on { value(anyDouble()) } doAnswer { i -> log(i.arguments[0] as Double, 5.0) }
@@ -93,7 +93,7 @@ fun writeMocksCsv() {
 fun main() {
 //    writeMocksCsv()
     /*val mock = getFunctionSystemMock(MockType.FINAL)
-    writeResultsToCsv(mock, -0.1, 2.0, 0.05, "final_test.csv", 10)*/
+    writeResultsToCsv(mock, -0.1, 2.0, 0.05, "final_test.csv", 15)*/
 
     val cos = CosSeries(0.0001)
     val ln = LnSeries(0.0001)
@@ -110,9 +110,34 @@ fun main() {
     println("ln(5) = ${ln.value(5.0)} == ${ln(5.0)}")
     println("ln(10) = ${ln.value(10.0)} == ${ln(10.0)}")
     for (i in 0..10) {
-        val x = i/10.0
+        val x = i / 10.0
         println("x = $x")
-        println("ln = ${ln.value(x)}, ln2 = ${log2.value(x)}, ln5 = ${log5.value(x)}, ln10 = ${log10.value(x)}, f2 = ${fn2.value(x)}")
+        println(
+            "ln = ${ln.value(x)}, ln2 = ${log2.value(x)}, ln5 = ${log5.value(x)}, ln10 = ${log10.value(x)}, f2 = ${
+                fn2.value(
+                    x
+                )
+            }"
+        )
+        println(
+            "f2 series = ${(log2.value(x) + log2.value(x))} * ${log5.value(x)} = ${
+                (log2.value(x) + log2.value(x)) * log5.value(
+                    x
+                )
+            } * ${log10.value(x)} = ${(log2.value(x) + log2.value(x)) * log5.value(x) * log10.value(x)} pow 3 = ${
+                ((log2.value(
+                    x
+                ) + log2.value(x)) * log5.value(x) * log10.value(x)).pow(3)
+            } pow 2"
+        )
+        println("f2 series = ${((log2.value(x) + log2.value(x)) * log5.value(x) * log10.value(x)).pow(3).pow(2)}")
+        println(
+            "f2 = ${(log(x, 2.0) + log(x, 2.0))} * ${log(x, 5.0)} = ${
+                (log(x, 2.0) + log(x, 2.0)) * log(x, 5.0)
+            } * ${log(x, 10.0)} = ${(log(x, 2.0) + log(x, 2.0)) * log(x, 5.0) * log(x, 10.0)} pow 3 = ${
+                ((log(x, 2.0) + log(x, 2.0)) * log(x, 5.0) * log(x, 10.0)).pow(3)
+            } pow 2"
+        )
         println("ln = ${ln(x)}, ln2 = ${log2(x)}, ln5 = ${log(x, 5.0)}, ln10 = ${log(x, 10.0)}, f2 = ${refF2(x)}")
     }
 }

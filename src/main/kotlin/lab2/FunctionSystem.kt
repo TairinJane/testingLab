@@ -14,7 +14,7 @@ import kotlin.math.tan
 //x <= 0 : ((cot(x) - sec(x)) + cos(x))
 //x > 0 : (((((log_2(x) + log_2(x)) * log_5(x)) * log_10(x)) ^ 3) ^ 2)
 
-//x != pi*N, x != pi*N - pi/2
+//x != pi*N, x != pi*(N + 1/2)
 //x > 0
 
 //log series domain = (0, 2)
@@ -24,7 +24,7 @@ open class F1(private val cos: Cos, private val cot: Cot, private val sec: Sec) 
 }
 
 open class F2(private val log2: Log2, private val log5: Log5, private val log10: Log10) : Function {
-    override fun value(x: Double): Double = ((log2.value(x) + log2.value(x)) * log5.value(x) * log10.value(x)).pow(3.0).pow(2.0)
+    override fun value(x: Double): Double = ((log2.value(x) + log2.value(x)) * log5.value(x) * log10.value(x)).pow(3).pow(2)
 }
 
 class FunctionSystem(private val f1: F1, private val f2: F2) : Function {
@@ -36,7 +36,7 @@ fun refF1(x: Double): Double {
 }
 
 fun refF2(x: Double): Double {
-    return ((log(x, 2.0) + log(x, 2.0)) * log(x, 5.0) * log(x, 10.0)).pow(3.0).pow(2.0)
+    return ((log(x, 2.0) + log(x, 2.0)) * log(x, 5.0) * log(x, 10.0)).pow(3).pow(2)
 }
 
 fun refFunctionSystem(x: Double): Double {

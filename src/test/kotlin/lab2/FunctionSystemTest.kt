@@ -2,6 +2,7 @@ package lab2
 
 import lab2.trigonometry.equalsDelta
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import kotlin.math.PI
@@ -18,7 +19,7 @@ class FunctionSystemTest {
             val testValue = mock.value(x)
             Assertions.assertTrue(
                 testValue.equalsDelta(refValue, precision),
-                "test $testValue != $refValue with precision = $precision on mock $type"
+                "test f($x) = %.8f != %.8f with precision = %.8f on mock $type".format(testValue, refValue, precision)
             )
         }
     }
@@ -29,8 +30,8 @@ class FunctionSystemTest {
         testValueOnDifferentSteps(x)
     }
 
-    @ParameterizedTest(name = "x != pi*N, x != pi*N - pi/2 at {0}")
-    @ValueSource(doubles = [-PI * 3, -PI * 10 - PI / 2, -PI * 345, -PI * 22 - PI / 2])
+    @ParameterizedTest(name = "x != pi*N, x != pi*(N + 1/2) at {0}")
+    @ValueSource(doubles = [PI * -3, PI * (-10 + 1 / 2), PI * -345, PI * (-22 + 1 / 2)])
     fun `cos function test`(x: Double) {
         testValueOnDifferentSteps(x)
     }
@@ -45,5 +46,22 @@ class FunctionSystemTest {
     @ValueSource(doubles = [2*(PI* -8 - 1.18487), 2*(PI* -43 - 0.385931)])
     fun stationary(x: Double) {
         testValueOnDifferentSteps(x)
+    }
+
+    @ParameterizedTest(name = "log for x < 1 at {0}")
+    @ValueSource(doubles = [0.0058, 0.2, 0.84206])
+    fun logDown(x: Double) {
+        testValueOnDifferentSteps(x)
+    }
+
+    @ParameterizedTest(name = "log for x > 1 at {0}")
+    @ValueSource(doubles = [1.13, 4.863, 99.852])
+    fun logUp(x: Double) {
+        testValueOnDifferentSteps(x)
+    }
+
+    @Test
+    fun `log at x=1`() {
+        testValueOnDifferentSteps(1.0)
     }
 }
