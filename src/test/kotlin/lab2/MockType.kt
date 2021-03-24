@@ -2,13 +2,11 @@ package lab2
 
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.mock
+import lab2.csvWriter.writeResultsToCsv
 import lab2.log.*
 import lab2.trigonometry.*
 import org.mockito.ArgumentMatchers.anyDouble
-import kotlin.math.cos
-import kotlin.math.ln
-import kotlin.math.log
-import kotlin.math.tan
+import kotlin.math.*
 
 enum class MockType {
     MAIN,
@@ -88,5 +86,33 @@ fun writeMocksCsv() {
     val mockTypes = MockType.values()
     for (type in mockTypes) {
         val mock = getFunctionSystemMock(type)
+        writeResultsToCsv(mock, -10.0, 5.0, 0.05, "${type.name}.csv")
+    }
+}
+
+fun main() {
+//    writeMocksCsv()
+    /*val mock = getFunctionSystemMock(MockType.FINAL)
+    writeResultsToCsv(mock, -0.1, 2.0, 0.05, "final_test.csv", 10)*/
+
+    val cos = CosSeries(0.0001)
+    val ln = LnSeries(0.0001)
+    val sin = Sin(cos)
+    val cot = Cot(cos, sin)
+    val sec = Sec(cos)
+    val log5 = Log5(ln)
+    val log2 = Log2(ln)
+    val log10 = Log10(ln)
+    val fn1 = F1(cos, cot, sec)
+    val fn2 = F2(log2, log5, log10)
+    val fn = FunctionSystem(fn1, fn2)
+
+    println("ln(5) = ${ln.value(5.0)} == ${ln(5.0)}")
+    println("ln(10) = ${ln.value(10.0)} == ${ln(10.0)}")
+    for (i in 0..10) {
+        val x = i/10.0
+        println("x = $x")
+        println("ln = ${ln.value(x)}, ln2 = ${log2.value(x)}, ln5 = ${log5.value(x)}, ln10 = ${log10.value(x)}, f2 = ${fn2.value(x)}")
+        println("ln = ${ln(x)}, ln2 = ${log2(x)}, ln5 = ${log(x, 5.0)}, ln10 = ${log(x, 10.0)}, f2 = ${refF2(x)}")
     }
 }

@@ -1,6 +1,7 @@
 package lab2.log
 
 import lab2.Function
+import kotlin.math.abs
 import kotlin.math.ln
 import kotlin.math.pow
 
@@ -21,7 +22,7 @@ class LnSeries(private val precision: Double = 0.0001) : Ln() {
             result += term
             i++
             term = lnTerm(x, i)
-        } while (term > precision)
+        } while (abs(term) > precision && term.isFinite() && i < 100)
         return -result
     }
 }
