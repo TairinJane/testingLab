@@ -4,15 +4,12 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import lab2.log.*
 import lab2.trigonometry.*
-import kotlin.math.cos
-import kotlin.math.ln
-import kotlin.math.log
-import kotlin.math.tan
+import kotlin.math.*
 
 enum class MockType {
-    BASE,
-    DERIVATIVE,
     MAIN,
+    DERIVATIVE,
+    BASE,
     FINAL
 }
 
@@ -53,18 +50,32 @@ fun getFunctionSystemMock(mockType: MockType, x: Double): FunctionSystem {
         MockType.BASE -> {
             val cosMock: Cos = mock {
                 on { value(x) } doReturn cos(x)
+                on { value(PI/2 - x) } doReturn cos(PI/2 - x)
             }
+            println(cosMock.value(x))
             val lnMock: Ln = mock {
+                on { value(5.0) } doReturn ln(5.0)
+                on { value(10.0) } doReturn ln(10.0)
+                on { value(2.0) } doReturn ln(2.0)
                 on { value(x) } doReturn ln(x)
             }
+            println(lnMock.value(x))
             val sin = Sin(cosMock)
+            println(sin.value(x))
             val cot = Cot(cosMock, sin)
+            println(cot.value(x))
             val sec = Sec(cosMock)
+            println(sec.value(x))
             val log5 = Log5(lnMock)
+            println(log5.value(x))
             val log2 = Log2(lnMock)
+            println(log2.value(x))
             val log10 = Log10(lnMock)
+            println(log10.value(x))
             val fn1 = F1(cosMock, cot, sec)
+            println(fn1.value(x))
             val fn2 = F2(log2, log5, log10)
+            println(fn2.value(x))
             return FunctionSystem(fn1, fn2)
         }
         MockType.FINAL -> {

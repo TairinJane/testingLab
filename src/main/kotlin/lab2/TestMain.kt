@@ -9,13 +9,14 @@ import lab2.trigonometry.CosSeries
 import lab2.trigonometry.Cot
 import lab2.trigonometry.Sec
 import lab2.trigonometry.Sin
+import kotlin.math.PI
 
 fun main() {
     /*val ln = LnSeries(10)
     for (i in -20..20) {
         println(ln.value(i / 10.0))
     }*/
-    /*val testX = 1.0
+    val testX = -PI * 3
     val cos = CosSeries(0.00001)
     println(cos.value(testX))
     val ln = LnSeries(0.0001)
@@ -37,7 +38,7 @@ fun main() {
     val fn2 = F2(log2, log5, log10)
     println(fn2.value(testX))
     val functionSystem = FunctionSystem(fn1, fn2)
-    println(functionSystem.value(testX))*/
-    val cos = CosSeries()
-    writeResultsToCsv(cos, -1.0, 1.0, 0.1)
+    println(functionSystem.value(testX))
+    /*val cos = CosSeries()
+    writeResultsToCsv(cos, -1.0, 1.0, 0.1)*/
 }
