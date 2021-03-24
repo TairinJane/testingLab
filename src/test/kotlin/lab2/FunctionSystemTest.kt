@@ -13,7 +13,7 @@ class FunctionSystemTest {
     private fun testValuesOnDifferentSteps(x: Double) {
         val mockTypes = MockType.values()
         for (type in mockTypes) {
-            val mock = getFunctionSystemMock(type, x)
+            val mock = getFunctionSystemMock(type)
             val refValue = refFunctionSystem(x)
             val testValue = mock.value(x)
             Assertions.assertTrue(

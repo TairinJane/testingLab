@@ -5,10 +5,7 @@ import lab2.log.LnSeries
 import lab2.log.Log10
 import lab2.log.Log2
 import lab2.log.Log5
-import lab2.trigonometry.CosSeries
-import lab2.trigonometry.Cot
-import lab2.trigonometry.Sec
-import lab2.trigonometry.Sin
+import lab2.trigonometry.*
 import kotlin.math.PI
 
 fun main() {
