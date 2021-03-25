@@ -24,12 +24,6 @@ class FunctionSystemTest {
         }
     }
 
-    @ParameterizedTest(name = "Test log function at {0}")
-    @ValueSource(doubles = [0.0, 0.76, 1.0, 1.365, 1.9974, 2.0, 6.12])
-    fun `log function test`(x: Double) {
-        testValueOnDifferentSteps(x)
-    }
-
     @ParameterizedTest(name = "x != pi*N, x != pi*(N + 1/2) at {0}")
     @ValueSource(doubles = [PI * -3, PI * (-10 + 1 / 2), PI * -345, PI * (-22 + 1 / 2)])
     fun `cos function test`(x: Double) {
@@ -79,7 +73,7 @@ class FunctionSystemTest {
     }
 
     @ParameterizedTest(name = "log for x > 1 at {0}")
-    @ValueSource(doubles = [1.13, 4.863, 99.852])
+    @ValueSource(doubles = [1.13, 2.0, 4.863, 99.852])
     fun logUp(x: Double) {
         testValueOnDifferentSteps(x)
     }
