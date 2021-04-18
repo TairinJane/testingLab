@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.4.30"
+    id("eu.leontebbens.gradle.chromedriver-updater") version "1.6.2"
     application
 }
 
@@ -20,6 +21,13 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.0")
     testImplementation ("org.mockito:mockito-core:3.8.0")
     testImplementation ("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    testImplementation("org.seleniumhq.selenium:selenium-java:3.14.0")
+    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:3.14.0")
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.1.8")
+}
+
+chromedriver {
+    majorVersion = "90"
 }
 
 tasks.test {
