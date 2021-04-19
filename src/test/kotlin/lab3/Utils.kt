@@ -27,10 +27,22 @@ fun WebDriver.waitForAndClick(xpath: String, seconds: Long = 3) {
         .click()
 }
 
+fun WebDriver.waitForAndClick(element: WebElement, seconds: Long = 3) {
+    WebDriverWait(
+        this,
+        Duration.ofSeconds(seconds).toSeconds()
+    ).until(ExpectedConditions.elementToBeClickable(element))
+        .click()
+}
+
 fun WebDriver.waitForAndType(xpath: String, text: String, seconds: Long = 3) {
     WebDriverWait(
         this,
         Duration.ofSeconds(seconds).toSeconds()
     ).until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)))
         .sendKeys(text)
+}
+
+fun WebDriver.navigate(url: String) {
+    navigate().to(url)
 }

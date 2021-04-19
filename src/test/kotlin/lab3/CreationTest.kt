@@ -2,52 +2,15 @@ package lab3
 
 import org.junit.jupiter.api.*
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.time.Duration
-import java.util.concurrent.TimeUnit
 import kotlin.random.Random.Default.nextInt
 
+import org.openqa.selenium.interactions.Actions
 
-class CreationTest {
-    private val baseUrl = "https://www.blogspot.com"
 
-    companion object Driver {
-        val driver: WebDriver = ChromeDriver().apply {
-            manage().timeouts()?.implicitlyWait(3, TimeUnit.SECONDS)
-            manage().window()?.maximize()
-        }
-
-         @AfterAll
-         @JvmStatic
-         fun closeDriver() {
-             driver.quit()
-         }
-    }
-
-    private fun isLoginNeeded(): Boolean {
-        return driver.findElements(By.xpath("//a[contains(@class, 'sign-in')]")).isNotEmpty()
-    }
-
-    private fun login() {
-        driver.run {
-            clickByXpath("//a[contains(@class, 'sign-in')]")
-            typeByXpath("//input[@type='email']", "faketestse@gmail.com")
-            clickByXpath("//button[span='Далее']")
-            WebDriverWait(
-                this,
-                Duration.ofSeconds(3).toSeconds()
-            ).until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@type='password']")))
-                .sendKeys("faketestsePass3,")
-            clickByXpath("//button[span='Далее']")
-            if (isLoginNeeded()) {
-                waitForAndClick("//a[contains(@class, 'sign-in')]")
-                clickByXpath("//div[@data-identifier='faketestse@gmail.com']")
-            }
-        }
-    }
+class CreationTest : BaseTest() {
 
     private fun createInitialBlog() {
         driver.run {
@@ -72,12 +35,6 @@ class CreationTest {
             ).until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@role='button']/span[span='Готово']")))
                 .click()
         }
-    }
-
-    @BeforeEach
-    fun openBasePage() {
-        driver.navigate().to(baseUrl)
-        if (isLoginNeeded()) login()
     }
 
     @Test
@@ -119,6 +76,68 @@ class CreationTest {
             )
             waitForAndClick("//span[.='При этом сообщение будет опубликовано в вашем блоге.']/following-sibling::div/div[@role='button']/span/span[.='ОК']")
             Assertions.assertTrue(findElements(By.xpath("//div[@role='listitem']//span[.='New post']")).isNotEmpty())
+        }
+    }
+
+    @Test
+    fun addDraftPost() {
+        driver.run {
+            clickByXpath("//div[@role='button'][@aria-label='Создать новое сообщение']")
+            findElement(By.xpath("//input[@aria-label='Название']")).apply {
+                click()
+                sendKeys("Draft post")
+            }
+            switchTo().frame(findElement(By.xpath("//iframe[contains(@class, 'editable')]")))
+            typeByXpath("//body", "Post body")
+            switchTo().defaultContent()
+            clickByXpath("//span[@title='Изменения сохранены.']")
+            waitForAndClick(
+                "//div[@role='button'][@aria-label='Назад']",
+                5
+            )
+            findElements(By.xpath("//div[@role='listitem']")).apply {
+                Assertions.assertTrue(findElements(By.xpath(".//span[.='Draft post']")).isNotEmpty())
+                Assertions.assertTrue(findElements(By.xpath(".//div[.='Черновик']")).isNotEmpty())
+            }
+        }
+    }
+
+    @Test
+    fun deletePost() {
+        driver.run {
+            val postTitle = "Post to delete"
+            clickByXpath("//div[@role='button'][@aria-label='Создать новое сообщение']")
+            findElement(By.xpath("//input[@aria-label='Название']")).apply {
+                click()
+                sendKeys(postTitle)
+            }
+            clickByXpath("//span[@title='Изменения сохранены.']")
+            waitForAndClick(
+                "//div[@role='button'][@aria-label='Опубликовать'][@data-tooltip='Опубликовать']/*//div[.='Опубликовать']",
+                5
+            )
+            waitForAndClick("//span[.='При этом сообщение будет опубликовано в вашем блоге.']/following-sibling::div/div[@role='button']/span/span[.='ОК']")
+            Assertions.assertTrue(findElements(By.xpath("//div[@role='listitem']//span[.='$postTitle']")).isNotEmpty())
+
+            val builder = Actions(this)
+            val postElement =
+                findElement(By.xpath("//c-wiz[@aria-hidden='false']//div[@role='listitem'][.//span='$postTitle']"))
+            builder.moveToElement(postElement).build().perform()
+
+            val deleteButton = findElement(
+                By.xpath("//c-wiz[@aria-hidden='false']//div[@role='listitem']//div[@role='button'][@aria-label='Удалить это сообщение'][@data-tooltip='Удалить это сообщение']")
+            )
+            waitForAndClick(deleteButton)
+
+            val okButton = findElements(By.xpath("//div[@role='button']/span[span='Удалить сообщение']")).last()
+            waitForAndClick(okButton)
+
+            val deletedPost = findElement(By.xpath("//div[@role='listitem']//span[.='$postTitle']"))
+            WebDriverWait(
+                this,
+                Duration.ofSeconds(3).toSeconds()
+            ).until(ExpectedConditions.invisibilityOf(deletedPost))
+            Assertions.assertTrue(!deletedPost.isDisplayed)
         }
     }
 }
