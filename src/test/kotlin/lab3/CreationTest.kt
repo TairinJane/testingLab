@@ -1,8 +1,6 @@
 package lab3
 
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
@@ -14,11 +12,20 @@ import kotlin.random.Random.Default.nextInt
 
 
 class CreationTest {
-    private val driver: WebDriver = ChromeDriver().apply {
-        manage().timeouts()?.implicitlyWait(3, TimeUnit.SECONDS)
-        manage().window()?.maximize()
-    }
     private val baseUrl = "https://www.blogspot.com"
+
+    companion object Driver {
+        val driver: WebDriver = ChromeDriver().apply {
+            manage().timeouts()?.implicitlyWait(3, TimeUnit.SECONDS)
+            manage().window()?.maximize()
+        }
+
+         @AfterAll
+         @JvmStatic
+         fun closeDriver() {
+             driver.quit()
+         }
+    }
 
     private fun isLoginNeeded(): Boolean {
         return driver.findElements(By.xpath("//a[contains(@class, 'sign-in')]")).isNotEmpty()
@@ -30,7 +37,7 @@ class CreationTest {
             typeByXpath("//input[@type='email']", "faketestse@gmail.com")
             clickByXpath("//button[span='Далее']")
             WebDriverWait(
-                driver,
+                this,
                 Duration.ofSeconds(3).toSeconds()
             ).until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@type='password']")))
                 .sendKeys("faketestsePass3,")
@@ -69,19 +76,19 @@ class CreationTest {
 
     @BeforeEach
     fun openBasePage() {
-        driver.get(baseUrl)
+        driver.navigate().to(baseUrl)
         if (isLoginNeeded()) login()
     }
 
-    private fun addNewBlog() {
+    @Test
+    fun createNewBlog() {
         driver.run {
-            val randomNum = nextInt(50)
-            get(baseUrl)
+            val randomNum = nextInt(100)
             findElement(By.xpath("//div[@role='listbox'][@aria-label='Blog Selection']")).apply {
-                clickByXpath("./div[@role='presentation']")
-                clickByXpath("./div[last()]/div[last()]")
+                findElement(By.xpath("./div[@role='presentation']")).click()
+                findElement(By.xpath("./div[last()]/div[last()]")).click()
             }
-            typeByXpath("//input[@aria-label='Название']", "New blog $randomNum")
+            waitForAndType("//input[@aria-label='Название'][@aria-invalid]", "New blog $randomNum")
             clickByXpath("//div[@role='button']/span[span='Далее']")
             typeByXpath("//input[@aria-label='Адрес']", "seTpo$randomNum")
             WebDriverWait(this, Duration.ofSeconds(3).toSeconds()).until(
@@ -90,13 +97,8 @@ class CreationTest {
                 )
             )
             waitForAndClick("//div[@role='button']/span[span='Сохранить']")
-            Assertions.assertTrue(findElements(By.xpath("//div[@aria-label='Tpo$randomNum']")).isNotEmpty())
+            Assertions.assertTrue(findElements(By.xpath("//div[@aria-label='New blog $randomNum']")).isNotEmpty())
         }
-    }
-
-    @Test
-    fun createNewBlog() {
-        addNewBlog()
     }
 
     @Test
@@ -111,7 +113,10 @@ class CreationTest {
             typeByXpath("//body", "Post body")
             switchTo().defaultContent()
             clickByXpath("//span[@title='Изменения сохранены.']")
-            waitForAndClick("//div[@role='button'][@aria-label='Опубликовать'][@data-tooltip='Опубликовать']/*//div[.='Опубликовать']", 5)
+            waitForAndClick(
+                "//div[@role='button'][@aria-label='Опубликовать'][@data-tooltip='Опубликовать']/*//div[.='Опубликовать']",
+                5
+            )
             waitForAndClick("//span[.='При этом сообщение будет опубликовано в вашем блоге.']/following-sibling::div/div[@role='button']/span/span[.='ОК']")
             Assertions.assertTrue(findElements(By.xpath("//div[@role='listitem']//span[.='New post']")).isNotEmpty())
         }
