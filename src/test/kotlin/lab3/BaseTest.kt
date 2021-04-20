@@ -1,6 +1,5 @@
 package lab3
 
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
@@ -34,9 +33,9 @@ open class BaseTest(private val baseUrl: String = "https://www.blogspot.com") {
         return driver.findElements(By.xpath("//a[contains(@class, 'sign-in')]")).isNotEmpty()
     }
 
-    private fun login() {
+    fun fillLoginFormIfNeeded() {
         driver.run {
-            clickByXpath("//a[contains(@class, 'sign-in')]")
+            if (findElements(By.xpath("//input[@type='email']")).isEmpty()) return
             typeByXpath("//input[@type='email']", "faketestse@gmail.com")
             clickByXpath("//button[span='Далее']")
             WebDriverWait(
@@ -45,6 +44,13 @@ open class BaseTest(private val baseUrl: String = "https://www.blogspot.com") {
             ).until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@type='password']")))
                 .sendKeys("faketestsePass3,")
             clickByXpath("//button[span='Далее']")
+        }
+    }
+
+    private fun login() {
+        driver.run {
+            clickByXpath("//a[contains(@class, 'sign-in')]")
+            fillLoginFormIfNeeded()
             if (isLoginNeeded()) {
                 waitForAndClick("//a[contains(@class, 'sign-in')]")
                 clickByXpath("//div[@data-identifier='faketestse@gmail.com']")
