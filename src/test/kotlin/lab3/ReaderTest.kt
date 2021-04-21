@@ -24,7 +24,7 @@ class ReaderTest : BaseTest("https://setpo4.blogspot.com/") {
         val postTitle = "Post 1"
         driver.run {
             clickByXpath("//h3[contains(@class, 'post-title')]/a[.='$postTitle']")
-            Assertions.assertEquals(postTitle, findElement(By.xpath("//h3[contains(@class, 'post-title')]")).text)
+            Assertions.assertEquals(postTitle, findElement(By.xpath("////h3[@class='post-title entry-title']")).text)
             Assertions.assertEquals(
                 "$postTitle body",
                 findElement(By.xpath("//div[contains(@class, 'post-body')]/p")).text.trim()
