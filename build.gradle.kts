@@ -23,7 +23,8 @@ dependencies {
     testImplementation ("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("org.seleniumhq.selenium:selenium-java:3.14.0")
     testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:3.14.0")
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.1.8")
+    testImplementation("org.seleniumhq.selenium:selenium-firefox-driver:3.14.0")
+    testImplementation("io.github.bonigarcia:webdrivermanager:4.4.0")
 }
 
 chromedriver {
