@@ -1,29 +1,12 @@
 package lab3
 
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 
 class ManagementTest: BaseTest() {
     private val postTitle = "Post 1"
     private val tag = "tag"
-
-    @Test
-    @Disabled
-    fun viewPost() {
-        driver.run {
-            hoverPost(postTitle)
-            waitForAndClick("//div[@role='listitem'][.//span='$postTitle']//div[@role='presentation'][@aria-label='Посмотреть']")
-
-            try {
-                val titleElement = waitUntilPresent("//h3[@class='post-title entry-title']", 10)
-                Assertions.assertEquals(postTitle, titleElement?.text)
-            } catch (e: Exception) {
-                println(driver.currentUrl)
-            }
-        }
-    }
 
     @Test
     fun addAndDeleteTag() {
@@ -78,6 +61,16 @@ class ManagementTest: BaseTest() {
                 Assertions.assertTrue(findElements(By.xpath(".//span[.='$postTitle']")).isNotEmpty())
                 Assertions.assertTrue(findElements(By.xpath(".//div[.='Черновик']")).isEmpty())
             }
+        }
+    }
+
+    @Test
+    fun changeTheme() {
+        driver.run {
+            clickByXpath("//span[@aria-label='Тема']")
+            waitForAndClick("//div[@data-variant-name='Flamingo']")
+            waitForAndClick("//div[@role='button'][@aria-label='Применить эту тему']")
+            waitUntilVisible("//div[.='Новая тема применена'][@id]", 5)
         }
     }
 }
